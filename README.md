@@ -1,3 +1,3 @@
 # CS50x UvA checks
 
-See (CS50 checks)[/cs50/checks] for the originals.
+See [https://github.com/cs50/checks](CS50 checks) for the originals.
