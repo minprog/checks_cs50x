@@ -1,0 +1,7 @@
+KEYS
+a set of keys
+3
+
+LAMP
+a brightly shining brass lamp
+2
