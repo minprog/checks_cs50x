@@ -121,17 +121,17 @@ class Sentimental(Checks):
             raise err
 
     @check("exists_cash")
-    def test_reject_negative(self):
+    def test_cash_reject_negative(self):
         """rejects a negative input like -.1"""
         self.spawn("python3 cash.py").stdin("-1").reject()
 
     @check("exists_cash")
-    def test_reject_foo(self):
+    def test_cash_reject_foo(self):
         """rejects a non-numeric input of "foo" """
         self.spawn("python3 cash.py").stdin("foo").reject()
 
     @check("exists_cash")
-    def test_reject_empty(self):
+    def test_cash_reject_empty(self):
         """rejects a non-numeric input of "" """
         self.spawn("python3 cash.py").stdin("").reject()
 
