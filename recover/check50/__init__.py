@@ -94,3 +94,9 @@ class Recover(Checks):
         self.spawn("./recover card.raw").exit(0, timeout=10)
         if self.hash("049.jpg") != self.hashes[-1]:
             raise Error("recovered image does not match")
+
+    @check("last_image")
+    @valgrind
+    def memory(self):
+        """program is free of memory errors"""
+        self.spawn("./recover card.raw").exit(0, timeout=10)
