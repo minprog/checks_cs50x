@@ -44,13 +44,13 @@ no_item = "No such item"
 
 class Adventure(Checks):
     def spawn_tiny(self):
-        return self.spawn("python3 adventure.py tiny")
+        return self.spawn("python3 adventure.py Tiny")
 
     def spawn_small(self):
-        return self.spawn("python3 adventure.py small")
+        return self.spawn("python3 adventure.py Small")
 
     def spawn_crowther(self):
-        return self.spawn("python3 adventure.py crowther")
+        return self.spawn("python3 adventure.py Crowther")
 
     @check()
     def exists(self):
@@ -67,8 +67,21 @@ class Adventure(Checks):
             for path in data_files:
                 check50.copy(path, dest)
 
-
     @check("exists")
+    def takes_arguments(self):
+        """Starting adventure with command line argument 'Tiny'."""
+        try:
+            self.spawn_tiny().stdout(re.escape(room_1_description), str_output=room_1_description)
+        except Error as error:
+            raise Error(rationale=f"Expected the description of initial "
+                                  f"room when Adventure starts.\n    {error}")
+
+        try:
+            self.spawn("python3 adventure.py CS50").exit(1)
+        except Error as error:
+            raise Error(rationale=f"Expected an exit code of 1. Not {error}")
+
+    @check("takes_arguments")
     def move_once(self):
         """Starting Adventure then moving once to the WEST."""
         try:
