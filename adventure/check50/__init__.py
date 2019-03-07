@@ -68,7 +68,7 @@ class Adventure(Checks):
                 check50.copy(path, dest)
 
     @check("exists")
-    def handles_arguments(self):
+    def handles_argument(self):
         """Starting adventure with command line argument 'Tiny'."""
         try:
             self.spawn_tiny().stdout(re.escape(room_1_description), str_output=room_1_description)
@@ -76,7 +76,7 @@ class Adventure(Checks):
             raise Error(rationale=f"Expected the description of initial "
                                   f"room when Adventure starts.\n    {error}")
 
-    @check("handles_arguments")
+    @check("handles_argument")
     def rejects_incorrect_arguments(self):
         """Rejects incorrect amount of arguments or wrong filename."""
         try:
@@ -94,7 +94,7 @@ class Adventure(Checks):
         except Error as error:
             raise Error(rationale=f"Expected an exit code of 1. Not {error}")
 
-    @check("takes_arguments")
+    @check("handles_argument")
     def move_once(self):
         """Starting Adventure then moving once to the WEST."""
         try:
