@@ -1,5 +1,6 @@
 import re
 import os
+import uuid
 
 from check50 import *
 import check50
@@ -61,7 +62,8 @@ class Adventure(Checks):
         # give v3 pls
         cwd = os.getcwd()
         dest = os.path.join(cwd, "data")
-        print(os.listdir(dest))
+        if os.path.exists(dest):
+            os.rename(dest, dest + str(uuid.uuid4()))
         os.mkdir(dest)
         with check50.cd(check50.config.check_dir):
             data_files = [os.path.join("data", data_file) for data_file in os.listdir("data")]
