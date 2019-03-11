@@ -61,7 +61,7 @@ class Adventure(Checks):
         # give v3 pls
         cwd = os.getcwd()
         dest = os.path.join(cwd, "data")
-        print(os.listdir(cwd))
+        print(os.listdir(dest))
         os.mkdir(dest)
         with check50.cd(check50.config.check_dir):
             data_files = [os.path.join("data", data_file) for data_file in os.listdir("data")]
