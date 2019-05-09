@@ -1,6 +1,7 @@
 from check50 import *
 from functools import wraps
-
+import subprocess
+import os
 
 def helper(f):
     @wraps(f)
@@ -9,6 +10,33 @@ def helper(f):
             self.app = self.flask(Survey.APP)
         return f(self, *args, **kwargs)
     return wrapper
+
+
+def unpack(filename):
+    p = subprocess.call(f"unzip {filename}")
+
+
+def goto(filename):
+    contents = os.listdir(".")
+
+    # Traverse through dir until  is found
+    while "filename.py" not in contents:
+        dirs = [c for c in contents if not c.startswith(".") and os.path.isdir(c)]
+        if len(dirs) == 1:
+            os.chdir(dirs[0])
+            contents = os.listdir(".")
+        else:
+            return False
+
+    return True
+
+ZIPNAME = "survey.zip"
+
+REQUIRED = ["application.py",
+            "templates/layout.html",
+            "templates/form.html",
+            "templates/error.html",
+            "static/styles.css"]
 
 
 class Survey(Checks):
@@ -25,7 +53,11 @@ class Survey(Checks):
     @check()
     def exists(self):
         """application.py exists"""
-        self.require("application.py")
+        if ZIPNAME in os.listdir("."):
+            unpack(ZIPNAME)
+            goto(REQUIRED[0])
+
+        self.require(*required)
 
 
     @check("exists")
