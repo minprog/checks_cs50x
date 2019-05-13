@@ -2,6 +2,47 @@ from check50 import *
 from functools import wraps
 
 
+ZIPNAME = "finance.zip"
+
+REQUIRED = ["application.py",
+            "finance.db",
+            "helpers.py",
+            "requirements.txt"]
+
+
+def remove_all_but(filename):
+    for f in set(os.listdir(".")) - {filename}:
+        if os.path.isdir(f):
+            shutil.rmtree(f)
+        else:
+            os.remove(f)
+
+
+def unpack(filename):
+    subprocess.call(["unzip", filename], stdout=subprocess.PIPE)
+
+
+def goto(filename):
+    contents = os.listdir(".")
+
+    # Traverse through dir until filename is found
+    while filename not in contents:
+        dirs = [c for c in contents if not c.startswith(".") and os.path.isdir(c)]
+
+        # If there's more than 1 dir, fail
+        if len(dirs) != 1:
+            return False
+
+        # Goto only dir
+        dir = dirs[0]
+        contents = os.listdir(dir)
+        for c in contents:
+            shutil.move(os.path.join(dir, c), ".")
+        os.rmdir(dir)
+
+    return True
+
+
 def helper(f):
     @wraps(f)
     def wrapper(self, *args, **kwargs):
@@ -72,7 +113,14 @@ class Finance(Checks):
     @check()
     def exists(self):
         """application.py exists"""
-        self.require("application.py")
+        if ZIPNAME in os.listdir("."):
+            remove_all_but(ZIPNAME)
+            unpack(ZIPNAME)
+
+            if not goto(REQUIRED[0]):
+                raise Error(f"Could not find {REQUIRED[0]} in .zip")
+
+        self.require(*REQUIRED)
         self.add("lookup.py")
         self.append_code("helpers.py", "lookup.py")
 
@@ -187,3 +235,7 @@ class Finance(Checks):
         """sell handles valid sale"""
         self.login("check50", "ohHai28!")
         self.transaction("/sell", "AAAA", "2").content("56\.00", "56.00").content(r"9,?944\.00", "9,944.00")
+
+
+if ZIPNAME in os.listdir("."):
+    Survey.exists.__doc__ = f"Extracted {ZIPNAME} and {REQUIRED[0]} exists"

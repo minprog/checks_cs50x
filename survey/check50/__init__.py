@@ -38,7 +38,7 @@ def unpack(filename):
 def goto(filename):
     contents = os.listdir(".")
 
-    # Traverse through dir until  is found
+    # Traverse through dir until filename is found
     while filename not in contents:
         dirs = [c for c in contents if not c.startswith(".") and os.path.isdir(c)]
 
