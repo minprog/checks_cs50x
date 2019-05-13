@@ -22,6 +22,11 @@ def helper(f):
     return wrapper
 
 
+def remove_all_but(filename):
+    for f in set(os.listdir(".")) - {filename}:
+        os.remove(f)
+
+
 def unpack(filename):
     subprocess.call(["unzip", filename], stdout=subprocess.PIPE)
 
@@ -45,9 +50,7 @@ def goto(filename):
 
 
 class Survey(Checks):
-
     APP = "application.py"
-
 
     @helper
     def get_content(self, route, tag="input"):
@@ -59,6 +62,7 @@ class Survey(Checks):
     def exists(self):
         """application.py exists"""
         if ZIPNAME in os.listdir("."):
+            remove_all_but(ZIPNAME)
             unpack(ZIPNAME)
 
             if not goto(REQUIRED[0]):
