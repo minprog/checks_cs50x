@@ -1,6 +1,2 @@
 *.pyc
 __pycache__/
-#application.py
-#finance.db
-#helpers.py
-#requirements.txt
