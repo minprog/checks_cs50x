@@ -57,7 +57,7 @@ class Survey(Checks):
             unpack(ZIPNAME)
             goto(REQUIRED[0])
 
-        self.require(*required)
+        self.require(*REQUIRED)
 
 
     @check("exists")
