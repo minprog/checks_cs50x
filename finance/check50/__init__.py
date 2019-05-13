@@ -1,5 +1,8 @@
 from check50 import *
 from functools import wraps
+import subprocess
+import os
+import shutil
 
 
 ZIPNAME = "finance.zip"
