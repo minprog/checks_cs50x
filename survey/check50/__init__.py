@@ -2,6 +2,7 @@ from check50 import *
 from functools import wraps
 import subprocess
 import os
+import shutil
 
 
 ZIPNAME = "survey.zip"
@@ -24,7 +25,7 @@ def helper(f):
 
 def remove_all_but(filename):
     for f in set(os.listdir(".")) - {filename}:
-        os.remove(f)
+        shutil.rmtree(f)
 
 
 def unpack(filename):
