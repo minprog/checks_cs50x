@@ -13,7 +13,7 @@ def helper(f):
 
 
 def unpack(filename):
-    p = subprocess.call(f"unzip {filename}")
+    p = subprocess.call(["unzip", filename])
 
 
 def goto(filename):
