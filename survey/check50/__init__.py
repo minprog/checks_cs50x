@@ -47,8 +47,11 @@ def goto(filename):
             return False
 
         # Goto only dir
-        os.chdir(dirs[0])
-        contents = os.listdir(".")
+        dir = dirs[0]
+        contents = os.listdir(dir)
+        for c in contents:
+            shutil.move(os.path.join(dir, c), ".")
+        os.rmdir(dir)
 
     return True
 
@@ -130,4 +133,4 @@ class Survey(Checks):
 
 
 if ZIPNAME in os.listdir("."):
-    Survey.exists.__doc__ = f"Extracting {ZIPNAME} and searching for {REQUIRED[0]}"
+    Survey.exists.__doc__ = f"Extracted {ZIPNAME} and {REQUIRED[0]} exists"
