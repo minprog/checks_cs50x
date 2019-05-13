@@ -241,4 +241,4 @@ class Finance(Checks):
 
 
 if ZIPNAME in os.listdir("."):
-    Survey.exists.__doc__ = f"Extracted {ZIPNAME} and {REQUIRED[0]} exists"
+    Finance.exists.__doc__ = f"Extracted {ZIPNAME} and {REQUIRED[0]} exists"
