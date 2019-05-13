@@ -122,4 +122,4 @@ class Survey(Checks):
 
 
 if ZIPNAME in os.listdir("."):
-    Survey.exists.__doc__ = "foo"
+    Survey.exists.__doc__ = f"Extracting {ZIPNAME} and searching for {REQUIRED[0]}"
