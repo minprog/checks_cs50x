@@ -3,6 +3,16 @@ from functools import wraps
 import subprocess
 import os
 
+
+ZIPNAME = "survey.zip"
+
+REQUIRED = ["application.py",
+            "templates/layout.html",
+            "templates/form.html",
+            "templates/error.html",
+            "static/styles.css"]
+
+
 def helper(f):
     @wraps(f)
     def wrapper(self, *args, **kwargs):
@@ -13,30 +23,25 @@ def helper(f):
 
 
 def unpack(filename):
-    p = subprocess.call(["unzip", filename])
+    subprocess.call(["unzip", filename], stdout=subprocess.PIPE)
 
 
 def goto(filename):
     contents = os.listdir(".")
 
     # Traverse through dir until  is found
-    while "filename.py" not in contents:
+    while filename not in contents:
         dirs = [c for c in contents if not c.startswith(".") and os.path.isdir(c)]
-        if len(dirs) == 1:
-            os.chdir(dirs[0])
-            contents = os.listdir(".")
-        else:
+
+        # If there's more than 1 dir, fail
+        if len(dirs) != 1:
             return False
 
+        # Goto only dir
+        os.chdir(dirs[0])
+        contents = os.listdir(".")
+
     return True
-
-ZIPNAME = "survey.zip"
-
-REQUIRED = ["application.py",
-            "templates/layout.html",
-            "templates/form.html",
-            "templates/error.html",
-            "static/styles.css"]
 
 
 class Survey(Checks):
@@ -55,7 +60,9 @@ class Survey(Checks):
         """application.py exists"""
         if ZIPNAME in os.listdir("."):
             unpack(ZIPNAME)
-            goto(REQUIRED[0])
+
+            if not goto(REQUIRED[0]):
+                raise Error(f"Could not find {REQUIRED[0]} in .zip")
 
         self.require(*REQUIRED)
 
