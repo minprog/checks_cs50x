@@ -59,7 +59,7 @@ class Survey(Checks):
     def exists(self):
         """application.py exists"""
         if ZIPNAME in os.listdir("."):
-            exists.__doc__ = "foo"
+            Survey.exists.__doc__ = "foo"
 
             unpack(ZIPNAME)
 
