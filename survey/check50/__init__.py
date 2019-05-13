@@ -59,8 +59,6 @@ class Survey(Checks):
     def exists(self):
         """application.py exists"""
         if ZIPNAME in os.listdir("."):
-            Survey.exists.__doc__ = "foo"
-
             unpack(ZIPNAME)
 
             if not goto(REQUIRED[0]):
@@ -121,3 +119,7 @@ class Survey(Checks):
         if len(selects) < 1 or \
             any((len(select.find_all("option")) < 2 for select in selects)):
             raise Error("expected one or more select menus, each with two or more options")
+
+
+if ZIPNAME in os.listdir("."):
+    Survey.exists.__doc__ = "foo"
