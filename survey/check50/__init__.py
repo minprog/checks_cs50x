@@ -25,7 +25,10 @@ def helper(f):
 
 def remove_all_but(filename):
     for f in set(os.listdir(".")) - {filename}:
-        shutil.rmtree(f)
+        if os.path.isdir(f):
+            shutil.rmtree(f)
+        else:
+            os.remove(f)
 
 
 def unpack(filename):
