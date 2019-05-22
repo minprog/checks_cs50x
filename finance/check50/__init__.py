@@ -52,15 +52,9 @@ def goto(filename):
 
 
 def no_print(f):
-    @contextlib.contextmanager
-    def capture_stdout():
-    	f = io.StringIO()
-    	with contextlib.redirect_stdout(f):
-    		yield f
-
     @wraps(f)
     def wrapper(self, *args, **kwargs):
-        with capture_stdout():
+        with contextlib.redirect_stdout(io.StringIO()):
             return f(self, *args, **kwargs)
     return wrapper
 
