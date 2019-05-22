@@ -61,6 +61,7 @@ def no_print(f):
 
 
 def ignore_warnings(f):
+    @wraps(f)
     def wrapper(self, *args, **kwargs):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
