@@ -5,6 +5,7 @@ import os
 import shutil
 import logging
 import contextlib
+import io
 
 # Disable all logging
 logging.disable(logging.CRITICAL)
