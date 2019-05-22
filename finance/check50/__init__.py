@@ -11,8 +11,8 @@ import warnings
 # Disable all logging
 logging.disable(logging.CRITICAL)
 
-# Ignore all warnings
-warnings.filterwarnings("ignore")
+# Ignore all resource warnings
+warnings.filterwarnings("ignore", category=ResourceWarning)
 
 ZIPNAME = "finance.zip"
 
