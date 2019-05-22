@@ -132,7 +132,7 @@ class Finance(Checks):
         return self.app.post("{}".format(route), data={"symbol": symbol, "shares": shares})
 
     @check()
-    @no_print()
+    @no_print
     def exists(self):
         """application.py exists"""
         if ZIPNAME in os.listdir("."):
@@ -147,38 +147,38 @@ class Finance(Checks):
         self.append_code("helpers.py", "lookup.py")
 
     @check("exists")
-    @no_print()
+    @no_print
     def startup(self):
         """application starts up"""
         self.flask(Finance.APP).get("/").status(200)
 
     @check("startup")
-    @no_print()
+    @no_print
     def register_page(self):
         """register page has all required elements"""
         self.validate_form("/register", ["username", "password", "confirmation"])
 
     @check("register_page")
-    @no_print()
+    @no_print
     def simple_register(self):
         """registering user succeeds"""
         self.register("check50", "ohHai28!", "ohHai28!").status(200)
 
     @check("register_page")
-    @no_print()
+    @no_print
     def register_empty_field_fails(self):
         """registration with an empty field fails"""
         for user in [("", "crimson", "crimson"), ("jharvard", "crimson", ""), ("jharvard", "", "")]:
             self.register(*user).status(400)
 
     @check("register_page")
-    @no_print()
+    @no_print
     def register_password_mismatch_fails(self):
         """registration with password mismatch fails"""
         self.register("check50user1", "thisiscs50", "crimson").status(400)
 
     @check("register_page")
-    @no_print()
+    @no_print
     def register_reject_duplicate_username(self):
         """registration rejects duplicate username"""
         user = ["elfie", "Doggo28!", "Doggo28!"]
@@ -186,61 +186,61 @@ class Finance(Checks):
         self.register(*user).status(400)
 
     @check("startup")
-    @no_print()
+    @no_print
     def login_page(self):
         """login page has all required elements"""
         self.validate_form("/login", ["username", "password"])
 
     @check("simple_register")
-    @no_print()
+    @no_print
     def can_login(self):
         """logging in as registered user succceeds"""
         self.login("check50", "ohHai28!").status(200).get("/", follow_redirects=False).status(200)
 
     @check("can_login")
-    @no_print()
+    @no_print
     def quote_page(self):
         """quote page has all required elements"""
         self.login("check50", "ohHai28!")
         self.validate_form("/quote", "symbol")
 
     @check("quote_page")
-    @no_print()
+    @no_print
     def quote_handles_invalid(self):
         """quote handles invalid ticker symbol"""
         self.login("check50", "ohHai28!")
         self.quote("ZZZ").status(400)
 
     @check("quote_page")
-    @no_print()
+    @no_print
     def quote_handles_blank(self):
         """quote handles blank ticker symbol"""
         self.login("check50", "ohHai28!")
         self.quote("").status(400)
 
     @check("quote_page")
-    @no_print()
+    @no_print
     def quote_handles_valid(self):
         """quote handles valid ticker symbol"""
         self.login("check50", "ohHai28!")
         self.quote("AAAA").status(200).content(r"28\.00", "28.00", name="body")
 
     @check("can_login")
-    @no_print()
+    @no_print
     def buy_page(self):
         """buy page has all required elements"""
         self.login("check50", "ohHai28!")
         self.validate_form("/buy", ["shares", "symbol"])
 
     @check("buy_page")
-    @no_print()
+    @no_print
     def buy_handles_invalid(self):
         """buy handles invalid ticker symbol"""
         self.login("check50", "ohHai28!")
         self.transaction("/buy", "ZZZZ", "2").status(400)
 
     @check("buy_page")
-    @no_print()
+    @no_print
     def buy_handles_incorrect_shares(self):
         """buy handles fractional, negative, and non-numeric shares"""
         self.login("check50", "ohHai28!")
@@ -249,14 +249,14 @@ class Finance(Checks):
         self.transaction("/buy", "AAAA", "foo").status(400)
 
     @check("buy_page")
-    @no_print()
+    @no_print
     def buy_handles_valid(self):
         """buy handles valid purchase"""
         self.login("check50", "ohHai28!")
         self.transaction("/buy", "AAAA", "4").content(r"112\.00", "112.00").content(r"9,?888\.00", "9,888.00")
 
     @check("buy_handles_valid")
-    @no_print()
+    @no_print
     def sell_page(self):
         """sell page has all required elements"""
         self.login("check50", "ohHai28!")
@@ -264,14 +264,14 @@ class Finance(Checks):
         self.validate_form("/sell", ["symbol"], field_tag="select")
 
     @check("buy_handles_valid")
-    @no_print()
+    @no_print
     def sell_handles_invalid(self):
         """sell handles invalid number of shares"""
         self.login("check50", "ohHai28!")
         self.transaction("/sell", "AAAA", "8").status(400)
 
     @check("buy_handles_valid")
-    @no_print()
+    @no_print
     def sell_handles_valid(self):
         """sell handles valid sale"""
         self.login("check50", "ohHai28!")
