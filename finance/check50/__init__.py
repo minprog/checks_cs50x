@@ -123,8 +123,8 @@ class Finance(Checks):
             remove_all_but(ZIPNAME)
             unpack(ZIPNAME)
 
-            if not goto(REQUIRED[0]):
-                raise Error(f"Could not find {REQUIRED[0]} in .zip")
+        if not goto(REQUIRED[0]):
+            raise Error(f"Could not find {REQUIRED[0]}")
 
         self.require(*REQUIRED)
         self.add("lookup.py")
