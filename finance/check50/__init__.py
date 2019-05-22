@@ -6,9 +6,13 @@ import shutil
 import logging
 import contextlib
 import io
+import warnings
 
 # Disable all logging
 logging.disable(logging.CRITICAL)
+
+# Ignore all warnings
+warnings.filterwarnings("ignore")
 
 ZIPNAME = "finance.zip"
 
