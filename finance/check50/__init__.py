@@ -8,11 +8,11 @@ import contextlib
 import io
 import warnings
 
-# Disable all logging
-logging.disable(logging.CRITICAL)
-
 # Ignore all resource warnings
 logging.captureWarnings(True)
+
+# Disable all logging
+logging.disable(logging.CRITICAL)
 
 ZIPNAME = "finance.zip"
 
