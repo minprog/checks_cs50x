@@ -3,7 +3,10 @@ from functools import wraps
 import subprocess
 import os
 import shutil
+import logging
 
+# Disable all logging
+logging.disable(logging.CRITICAL)
 
 ZIPNAME = "finance.zip"
 
