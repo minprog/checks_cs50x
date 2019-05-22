@@ -3,7 +3,10 @@ from functools import wraps
 import subprocess
 import os
 import shutil
+import logging
 
+# Disable all logging
+logging.disable(logging.CRITICAL)
 
 ZIPNAME = "finance.zip"
 
@@ -30,7 +33,7 @@ def goto(filename):
 
     # Traverse through dir until filename is found
     while filename not in contents:
-        dirs = [c for c in contents if not c.startswith(".") and os.path.isdir(c)]
+        dirs = [c for c in contents if not (c.startswith(".") or c.startswith("__")) and os.path.isdir(c)]
 
         # If there's more than 1 dir, fail
         if len(dirs) != 1:
@@ -120,8 +123,8 @@ class Finance(Checks):
             remove_all_but(ZIPNAME)
             unpack(ZIPNAME)
 
-            if not goto(REQUIRED[0]):
-                raise Error(f"Could not find {REQUIRED[0]} in .zip")
+        if not goto(REQUIRED[0]):
+            raise Error(f"Can't find {REQUIRED[0]}")
 
         self.require(*REQUIRED)
         self.add("lookup.py")
