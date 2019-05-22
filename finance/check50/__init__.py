@@ -8,9 +8,6 @@ import contextlib
 import io
 import warnings
 
-# Ignore all resource warnings
-logging.captureWarnings(True)
-
 # Disable all logging
 logging.disable(logging.CRITICAL)
 
@@ -59,6 +56,14 @@ def no_print(f):
     @wraps(f)
     def wrapper(self, *args, **kwargs):
         with contextlib.redirect_stdout(io.StringIO()):
+            return f(self, *args, **kwargs)
+    return wrapper
+
+
+def ignore_warnings(f):
+    def wrapper(self, *args, **kwargs):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
             return f(self, *args, **kwargs)
     return wrapper
 
@@ -132,6 +137,7 @@ class Finance(Checks):
 
     @check()
     @no_print
+    @ignore_warnings
     def exists(self):
         """application.py exists"""
         if ZIPNAME in os.listdir("."):
@@ -147,24 +153,28 @@ class Finance(Checks):
 
     @check("exists")
     @no_print
+    @ignore_warnings
     def startup(self):
         """application starts up"""
         self.flask(Finance.APP).get("/").status(200)
 
     @check("startup")
     @no_print
+    @ignore_warnings
     def register_page(self):
         """register page has all required elements"""
         self.validate_form("/register", ["username", "password", "confirmation"])
 
     @check("register_page")
     @no_print
+    @ignore_warnings
     def simple_register(self):
         """registering user succeeds"""
         self.register("check50", "ohHai28!", "ohHai28!").status(200)
 
     @check("register_page")
     @no_print
+    @ignore_warnings
     def register_empty_field_fails(self):
         """registration with an empty field fails"""
         for user in [("", "crimson", "crimson"), ("jharvard", "crimson", ""), ("jharvard", "", "")]:
@@ -172,12 +182,14 @@ class Finance(Checks):
 
     @check("register_page")
     @no_print
+    @ignore_warnings
     def register_password_mismatch_fails(self):
         """registration with password mismatch fails"""
         self.register("check50user1", "thisiscs50", "crimson").status(400)
 
     @check("register_page")
     @no_print
+    @ignore_warnings
     def register_reject_duplicate_username(self):
         """registration rejects duplicate username"""
         user = ["elfie", "Doggo28!", "Doggo28!"]
@@ -186,18 +198,21 @@ class Finance(Checks):
 
     @check("startup")
     @no_print
+    @ignore_warnings
     def login_page(self):
         """login page has all required elements"""
         self.validate_form("/login", ["username", "password"])
 
     @check("simple_register")
     @no_print
+    @ignore_warnings
     def can_login(self):
         """logging in as registered user succceeds"""
         self.login("check50", "ohHai28!").status(200).get("/", follow_redirects=False).status(200)
 
     @check("can_login")
     @no_print
+    @ignore_warnings
     def quote_page(self):
         """quote page has all required elements"""
         self.login("check50", "ohHai28!")
@@ -205,6 +220,7 @@ class Finance(Checks):
 
     @check("quote_page")
     @no_print
+    @ignore_warnings
     def quote_handles_invalid(self):
         """quote handles invalid ticker symbol"""
         self.login("check50", "ohHai28!")
@@ -212,6 +228,7 @@ class Finance(Checks):
 
     @check("quote_page")
     @no_print
+    @ignore_warnings
     def quote_handles_blank(self):
         """quote handles blank ticker symbol"""
         self.login("check50", "ohHai28!")
@@ -219,6 +236,7 @@ class Finance(Checks):
 
     @check("quote_page")
     @no_print
+    @ignore_warnings
     def quote_handles_valid(self):
         """quote handles valid ticker symbol"""
         self.login("check50", "ohHai28!")
@@ -226,6 +244,7 @@ class Finance(Checks):
 
     @check("can_login")
     @no_print
+    @ignore_warnings
     def buy_page(self):
         """buy page has all required elements"""
         self.login("check50", "ohHai28!")
@@ -233,6 +252,7 @@ class Finance(Checks):
 
     @check("buy_page")
     @no_print
+    @ignore_warnings
     def buy_handles_invalid(self):
         """buy handles invalid ticker symbol"""
         self.login("check50", "ohHai28!")
@@ -240,6 +260,7 @@ class Finance(Checks):
 
     @check("buy_page")
     @no_print
+    @ignore_warnings
     def buy_handles_incorrect_shares(self):
         """buy handles fractional, negative, and non-numeric shares"""
         self.login("check50", "ohHai28!")
@@ -249,6 +270,7 @@ class Finance(Checks):
 
     @check("buy_page")
     @no_print
+    @ignore_warnings
     def buy_handles_valid(self):
         """buy handles valid purchase"""
         self.login("check50", "ohHai28!")
@@ -256,6 +278,7 @@ class Finance(Checks):
 
     @check("buy_handles_valid")
     @no_print
+    @ignore_warnings
     def sell_page(self):
         """sell page has all required elements"""
         self.login("check50", "ohHai28!")
@@ -264,6 +287,7 @@ class Finance(Checks):
 
     @check("buy_handles_valid")
     @no_print
+    @ignore_warnings
     def sell_handles_invalid(self):
         """sell handles invalid number of shares"""
         self.login("check50", "ohHai28!")
@@ -271,6 +295,7 @@ class Finance(Checks):
 
     @check("buy_handles_valid")
     @no_print
+    @ignore_warnings
     def sell_handles_valid(self):
         """sell handles valid sale"""
         self.login("check50", "ohHai28!")
